@@ -3,137 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Pixel Game</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #071821;
-        }
-        canvas {
-            display: block;
-            margin: auto;
-        }
-    </style>
+    <title>Valentine's Day Quiz</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-
-    <script>
-        // Setup canvas
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = 480;
-        canvas.height = 320;
-
-        // Colors
-        const COLORS = {
-            background: "#071821",
-            heart1: "#306850",
-            heart2: "#86c06c",
-            heart3: "#e0f8cf",
-        };
-
-        // Heart sprite
-        const heart = {
-            x: canvas.width / 2 - 16,
-            y: canvas.height - 60,
-            width: 32,
-            height: 32,
-            speed: 4,
-        };
-
-        // Falling item sprite
-        const items = [];
-        const itemSize = 16;
-
-        function spawnItem() {
-            const x = Math.random() * (canvas.width - itemSize);
-            items.push({ x, y: 0 });
-        }
-
-        // Controls
-        let keys = {};
-        window.addEventListener('keydown', (e) => (keys[e.key] = true));
-        window.addEventListener('keyup', (e) => (keys[e.key] = false));
-
-        // Game state
-        let score = 0;
-        let gameOver = false;
-
-        // Draw heart
-        function drawHeart() {
-            ctx.fillStyle = COLORS.heart2;
-            ctx.fillRect(heart.x, heart.y, heart.width, heart.height);
-        }
-
-        // Draw items
-        function drawItems() {
-            ctx.fillStyle = COLORS.heart3;
-            items.forEach((item) => {
-                ctx.fillRect(item.x, item.y, itemSize, itemSize);
-            });
-        }
-
-        // Update game state
-        function update() {
-            if (keys['ArrowLeft'] && heart.x > 0) {
-                heart.x -= heart.speed;
-            }
-            if (keys['ArrowRight'] && heart.x < canvas.width - heart.width) {
-                heart.x += heart.speed;
-            }
-
-            items.forEach((item, index) => {
-                item.y += 2;
-                if (
-                    item.x < heart.x + heart.width &&
-                    item.x + itemSize > heart.x &&
-                    item.y < heart.y + heart.height &&
-                    item.y + itemSize > heart.y
-                ) {
-                    items.splice(index, 1);
-                    score++;
-                }
-                if (item.y > canvas.height) {
-                    items.splice(index, 1);
-                    gameOver = true;
-                }
-            });
-
-            if (Math.random() < 0.02) {
-                spawnItem();
-            }
-        }
-
-        // Draw score
-        function drawScore() {
-            ctx.fillStyle = COLORS.heart1;
-            ctx.font = '16px Arial';
-            ctx.fillText(`Score: ${score}`, 10, 20);
-        }
-
-        // Game loop
-        function gameLoop() {
-            if (gameOver) {
-                ctx.fillStyle = COLORS.heart1;
-                ctx.font = '32px Arial';
-                ctx.fillText('Game Over!', canvas.width / 2 - 80, canvas.height / 2);
-                return;
-            }
-
-            ctx.fillStyle = COLORS.background;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            drawHeart();
-            drawItems();
-            drawScore();
-
-            update();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
-    </script>
+    <div class="container">
+        <h1>Valentine's Day Quiz</h1>
+        <div id="quiz-container">
+            <div id="question"></div>
+            <div id="options"></div>
+            <button id="next-button" class="hidden">Next</button>
+        </div>
+        <div id="result" class="hidden"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
